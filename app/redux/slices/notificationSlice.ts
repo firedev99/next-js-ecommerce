@@ -1,32 +1,32 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 interface NotificationsProps {
-    id: string
-    message: string
+  id: string
+  message: string
 }
 
 interface StateProps {
-    notifications: NotificationsProps[]
+  notifications: NotificationsProps[]
 }
 
 const initialState = {
-    notifications: [],
+  notifications: [],
 } as StateProps
 
 const notificationSlice = createSlice({
-    name: 'popup',
-    initialState,
-    reducers: {
-        setNotification(state, action: PayloadAction<NotificationsProps>) {
-            state.notifications = state.notifications.concat(action.payload)
-        },
-
-        deleteNotification(state, action: PayloadAction<string>) {
-            state.notifications = state.notifications.filter(
-                (notification) => action.payload !== notification.id
-            )
-        },
+  name: "popup",
+  initialState,
+  reducers: {
+    setNotification(state, action: PayloadAction<NotificationsProps>) {
+      state.notifications = state.notifications.concat(action.payload)
     },
+
+    deleteNotification(state, action: PayloadAction<string>) {
+      state.notifications = state.notifications.filter(
+        (notification) => action.payload !== notification.id
+      )
+    },
+  },
 })
 
 const { actions, reducer } = notificationSlice

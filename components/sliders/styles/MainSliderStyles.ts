@@ -71,14 +71,17 @@ export const MainSliderIntro = styled(motion.div)`
   }
 
   @media (max-width: 564px) {
+    top: 35.5%;
+    transform: translate(-50%, -35.5%);
+
     h1 {
       font-size: 4.6rem;
     }
   }
 
   @media (max-width: 492px) {
-    top: 37%;
-    transform: translate(-50%, -37%);
+    top: 36%;
+    transform: translate(-50%, -36%);
     h1 {
       font-size: 4rem;
     }

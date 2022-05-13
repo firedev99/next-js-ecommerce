@@ -43,6 +43,9 @@ import {
   ExtraMediaWrapper,
   ProductExtraDisplay,
 } from "../../styles/pages/ProductTempStyles"
+import { addQuantity, addToCart } from "../../app/redux/slices/featureSlice"
+import { setNotification } from "../../app/redux/slices/notificationSlice"
+import { uniqueID } from "../../lib/generateUniqueID"
 
 const Slider = dynamic(() => import("../../components/sliders/SliderWLens"), {
   ssr: false,
@@ -66,9 +69,8 @@ export default function SingleProductPage(): ReactElement {
   const { id } = router.query
 
   const dispatch = useAppDispatch()
-  const { status, featuringProducts } = useAppSelector(
-    (state) => state.general_product
-  )
+  const { status } = useAppSelector((state) => state.general_product)
+  const { cart } = useAppSelector((state) => state.features)
 
   // loading props
   const [loadingTransition, setLoadingTransition] = useState(true)
@@ -87,6 +89,45 @@ export default function SingleProductPage(): ReactElement {
   // single slider props
   const [currentIndex, setCurrentIndex] = useState(0)
   const [paginate, setPaginate] = useState(false)
+
+  // handle purchase
+  function handlePurchase() {
+    if (!productDetails) return
+
+    // check if the product already exists in the cart
+    const exists = cart.find((item) => item._id === productDetails._id)
+    if (exists) {
+      return dispatch(addQuantity(productDetails._id))
+    } else {
+      // check if the user has chosen a desired size or not!
+      if (!chosenSize) {
+        return dispatch(
+          setNotification({
+            id: uniqueID(),
+            message: "please add a desired size!",
+          })
+        )
+      } else {
+        dispatch(
+          addToCart({
+            ...productDetails,
+            quantity,
+            chosenSize,
+            chosenColor,
+          })
+        )
+      }
+    }
+
+    dispatch(
+      setNotification({
+        id: uniqueID(),
+        message: `${productDetails.name.split(" ")[0]}${
+          productDetails.name.split(" ").length === 1 ? "" : ".. "
+        } added to cart!`,
+      })
+    )
+  }
 
   // fetch specific product details and store it
   useEffect(() => {
@@ -292,6 +333,7 @@ export default function SingleProductPage(): ReactElement {
                       variants={hideVariants}
                       initial="initial"
                       animate="animate"
+                      onClick={handlePurchase}
                     >
                       <span>Add to cart</span>
                     </ProductCartButton>

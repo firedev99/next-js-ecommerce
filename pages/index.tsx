@@ -1,10 +1,7 @@
 import { ReactElement, useEffect, useState } from "react"
 import dynamic from "next/dynamic"
-import { useAppDispatch, useAppSelector } from "../app/hooks/redux"
-import {
-  fetchHomePageDetails,
-  fetchProductDetails,
-} from "../app/redux/slices/generalProductSlice"
+import { useAppDispatch } from "../app/hooks/redux"
+import { fetchHomePageDetails } from "../app/redux/slices/generalProductSlice"
 import {
   CategoryNavigation,
   HomeDisplays,
